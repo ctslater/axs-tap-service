@@ -1,0 +1,98 @@
+//
+// Modified from lsst-sqre/lsst-tap-service
+//
+plugins {
+    id 'war'
+}
+
+repositories {
+    mavenLocal()
+    jcenter()
+
+    maven {
+        url = 'http://www.cadc-ccda.hia-iha.nrc-cnrc.gc.ca/m2repo'
+    }
+}
+
+group = 'org.opencadc'
+sourceCompatibility = 1.7
+version = '1000'
+
+war {
+    archiveName = 'tap##' + project.version + '.war'
+}
+
+configurations {
+    intTestCompile.extendsFrom testCompile
+    intTestRuntime.extendsFrom testRuntime
+}
+
+dependencies {
+    compile 'log4j:log4j:1.2.+'
+    compile 'org.restlet.jee:org.restlet.ext.servlet:2.0.3'
+    compile 'org.opencadc:cadc-tap-server:[1.1.5,)'
+    compile 'org.opencadc:cadc-adql:[1.1.4,)'
+    compile 'org.opencadc:cadc-vosi:[1.0.1,2.0)'
+    compile 'org.opencadc:cadc-util:[1.2.18,)'
+
+    compile 'org.opencadc:cadc-access-control-identity:[1.0.7,)'
+
+    // https://mvnrepository.com/artifact/org.postgresql/postgresql
+    compile group: 'org.postgresql', name: 'postgresql', version: '42.2.5'
+
+    // https://mvnrepository.com/artifact/mysql/mysql-connector-java
+    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.13'
+
+    // Spark seems to be using this version of hive and 
+    // newer versions of the client will throw errors on connecting.
+    compile 'org.apache.hive:hive-jdbc:1.2.1'
+    // runtime group: 'org.apache.hadoop', name: 'hadoop-core', version: '1.2.1'
+    // https://mvnrepository.com/artifact/org.apache.hadoop/hadoop-common
+    compile group: 'org.apache.hadoop', name: 'hadoop-common', version: '2.3.0'
+
+
+
+    runtime 'org.opencadc:cadc-registry:[1.2.1,)'
+
+    testCompile 'junit:junit:4.+'
+    testCompile 'org.opencadc:cadc-test-uws:[1.1.1,)'
+    testCompile 'org.opencadc:cadc-test-vosi:[1.0.2,)'
+    testCompile 'org.opencadc:cadc-test-tap:[1.1,)'
+
+    intTestCompile 'org.opencadc:cadc-test-uws:[1.1.1,)'
+    intTestCompile 'org.opencadc:cadc-test-vosi:[1.0.2,)'
+    intTestCompile 'org.opencadc:cadc-test-tap:[1.1,)'
+}
+
+sourceSets {
+    intTest {
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir file('src/intTest/java')
+        }
+
+        // set the intTest resource directory
+        resources.srcDir file('src/intTest/resources')
+    }
+}
+
+tasks.withType(Test) {
+    // reset the report destinations so that intTests go to their
+    // own page
+    //reports.html.destination = file("${reporting.baseDir}/${name}")
+    reports.html.destination = file(reporting.baseDir.getAbsolutePath() + '/' + name)
+
+    // Assign all Java system properties from
+    // the command line to the tests
+    systemProperties System.properties as Map<String, ?>
+}
+
+task intTest(type: Test) {
+    // set the configuration context
+    // testClassesDir = sourceSets.intTest.output.classesDir
+    // classpath = sourceSets.intTest.runtimeClasspath
+
+    // run the tests always
+    // outputs.upToDateWhen { false }
+}
