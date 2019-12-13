@@ -6,7 +6,11 @@ CREATE TABLE IF NOT EXISTS tap_schema.schemas11
 	schema_name   varchar(64),
 	utype         varchar(512),
 	description   varchar(512),
-        schema_index  integer
+        schema_index  integer,
+        owner_id        varchar(32),
+        read_anon       integer,
+        read_only_group  varchar(128),
+        read_write_group varchar(128)
 ) row format delimited fields terminated by ',';
 
 
@@ -15,7 +19,11 @@ CREATE TABLE IF NOT EXISTS tap_schema.schemas
 	schema_name   varchar(64),
 	utype         varchar(512),
 	description   varchar(512),
-        schema_index  integer
+        schema_index  integer,
+        owner_id        varchar(32),
+        read_anon       integer,
+        read_only_group  varchar(128),
+        read_write_group varchar(128)
 ) row format delimited fields terminated by ',';
 
 
@@ -27,7 +35,11 @@ CREATE TABLE IF NOT EXISTS tap_schema.tables11
         table_type    varchar(8)   ,
 	utype         varchar(512),
 	description   varchar(512),
-	table_index   integer
+	table_index   integer,
+        owner_id        varchar(32),
+        read_anon       integer,
+        read_only_group  varchar(128),
+        read_write_group varchar(128)
 ) row format delimited fields terminated by ',';
 
 CREATE TABLE IF NOT EXISTS tap_schema.tables
@@ -37,7 +49,11 @@ CREATE TABLE IF NOT EXISTS tap_schema.tables
         table_type    varchar(8)   ,
 	utype         varchar(512),
 	description   varchar(512),
-	table_index   integer
+	table_index   integer,
+        owner_id        varchar(32),
+        read_anon       integer,
+        read_only_group  varchar(128),
+        read_write_group varchar(128)
     ) row format delimited fields terminated by ',';
 
 CREATE TABLE IF NOT EXISTS tap_schema.columns11

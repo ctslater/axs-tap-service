@@ -19,7 +19,6 @@
             <param-value>
                 ca.nrc.cadc.tap
                 org.opencadc.tap
-                ca.nrc.cadc.log
                 ca.nrc.cadc.rest
                 ca.nrc.cadc.uws
             </param-value>
@@ -103,7 +102,8 @@
          This implementation uses the TAP_SCHEMA to find the required metadata -->
     <servlet>
         <servlet-name>TableServlet</servlet-name>
-        <servlet-class>org.opencadc.tap.impl.ALMATableServlet</servlet-class>
+        <!-- <servlet-class>org.opencadc.tap.impl.ALMATableServlet</servlet-class> -->
+        <servlet-class>ca.nrc.cadc.vosi.TableServlet</servlet-class>
         <load-on-startup>3</load-on-startup>
     </servlet>
 
